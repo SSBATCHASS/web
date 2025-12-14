@@ -1,6 +1,6 @@
 💱 Currency Converter Web App
 
-A simple and beginner‑friendly Currency Converter web application built using HTML, CSS, and JavaScript. This project allows users to convert an entered amount from one currency to another through an interactive and clean user interface.
+A simple and beginner‑friendly Currency Converter web application built using HTML, CSS, and JavaScript. This project allows users to convert an entered amount from one currency to another through an interactive and clean user interface and also add extra file name is (ss.index) with unique user-interface and include CSS and JS inside the (ss.index)file you want to unique user-interface choose the file.
 
 📌 Project Description
 
