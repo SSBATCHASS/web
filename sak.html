@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neon Currency Converter</title>
+  <link rel="stylesheet" href="./style.css" />
+  <style>* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Courier New', monospace;
+}
+
+body {
+  overflow: hidden;
+  color: #fff;
+  position: relative;
+  background: linear-gradient(-45deg, #ff4e50, #fc913a, #f9d423, #eaecc6);
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+#bgCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+}
+
+.converter-card {
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid #00f9ff;
+  border-radius: 16px;
+  padding: 24px;
+  width: 360px;
+  text-align: center;
+  box-shadow: 0 0 25px #00f9ff;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 2s ease-in-out;
+}
+
+h1 {
+  font-size: 26px;
+  margin-bottom: 16px;
+  color: #00f9ff;
+  text-shadow: 0 0 15px #00f9ff;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  background: #000;
+  color: #00f9ff;
+  border: 1px solid #00f9ff;
+  outline: none;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.select-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.select-box {
+  width: 40%;
+  text-align: left;
+}
+
+.select-box label {
+  font-size: 14px;
+  margin-bottom: 4px;
+  display: block;
+  color: #00f9ff;
+}
+
+select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  background: #000;
+  color: #00f9ff;
+  border: 1px solid #00f9ff;
+}
+
+#switchCurrency {
+  background: transparent;
+  border: none;
+  font-size: 26px;
+  color: #00f9ff;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+#switchCurrency:hover {
+  transform: rotate(180deg);
+}
+
+#btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #00f9ff;
+  border: none;
+  color: black;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#btn:hover {
+  background-color: #00bcd4;
+}
+
+.status-text {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.result-box {
+  margin-top: 10px;
+  padding: 12px;
+  background-color: rgba(0, 249, 255, 0.1);
+  border: 1px dashed #00f9ff;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #00f9ff;
+  font-size: 16px;
+  text-shadow: 0 0 5px #00f9ff;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+</style>
+<script>
+    const canvas = document.getElementById("bgCanvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const particles = [];
+
+for (let i = 0; i < 60; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: Math.random() * 4 + 1,
+    dx: (Math.random() - 0.5) * 1.2,
+    dy: (Math.random() - 0.5) * 1.2,
+  });
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  particles.forEach((p) => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff33";
+    ctx.fill();
+
+    p.x += p.dx;
+    p.y += p.dy;
+
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+</script>
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+
+  <div class="converter-card">
+    <h1>💱 Currency Converter</h1>
+
+    <div class="input-group">
+      <input type="number" id="userValue" placeholder="Enter amount" min="1" />
+    </div>
+
+    <div class="select-row">
+      <div class="select-box">
+        <label for="fromCurrency">From</label>
+        <select id="fromCurrency"></select>
+      </div>
+      <button id="switchCurrency">⇆</button>
+      <div class="select-box">
+        <label for="toCurrency">To</label>
+        <select id="toCurrency"></select>
+      </div>
+    </div>
+
+    <button id="btn">Convert</button>
+
+    <p id="status" class="status-text"></p>
+    <div id="result" class="result-box"></div>
+  </div>
+
+  <script type="module" src="./script.js" defer></script>
+  <script src="./particles.js" defer></script>
+</body>
+</html>
